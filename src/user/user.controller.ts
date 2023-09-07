@@ -6,6 +6,7 @@ import { PageReqDto } from 'src/common/dto/req.dto';
 import { ApiGetItemsResponse, ApiGetResponse } from 'src/common/decorator/swagger.decorator';
 import { FindUserResDto } from './dto/res.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { User, UserAfterAuth } from 'src/common/decorator/user.decorator';
 
 @ApiTags('User')
 @ApiExtraModels(FindUserReqDto, FindUserReqDto, FindUserResDto)
@@ -17,10 +18,12 @@ export class UserController {
   @ApiGetItemsResponse(FindUserResDto)
   @Get()
   @UseGuards(JwtAuthGuard)
-  findAll(@Query() { page, size }: PageReqDto) {
+  findAll(@Query() { page, size }: PageReqDto, @User() user: UserAfterAuth) {
+    console.log(user);
     return this.userService.findAll();
   }
 
+  @ApiBearerAuth()
   @ApiGetResponse(FindUserReqDto)
   @Get(':id')
   findOne(@Param() { id }: FindUserReqDto) {
