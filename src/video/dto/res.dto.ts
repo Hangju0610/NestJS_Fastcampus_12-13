@@ -8,7 +8,7 @@ export class CreateVideoResDto {
   title: string;
 }
 
-export class FindVidoeUserResDto {
+export class FindVideoUserResDto {
   @ApiProperty({ required: true })
   id: string;
 
@@ -24,5 +24,5 @@ export class FindVideoResDto {
   title: string;
 
   @ApiProperty({ required: true })
-  user: FindVidoeUserResDto;
+  user: FindVideoUserResDto;
 }
