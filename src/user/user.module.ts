@@ -16,13 +16,13 @@ const UserMockService = {
   exports: [UserService],
   controllers: [UserController],
   providers: [
-    // UserService,
-    {
-      // provide 이름은 UserService
-      provide: UserService,
-      // 실제 제공하는 useValue 값은 UserMockService
-      useValue: UserMockService,
-    },
+    UserService,
+    // {
+    //   // provide 이름은 UserService
+    //   provide: UserService,
+    //   // 실제 제공하는 useValue 값은 UserMockService
+    //   useValue: UserMockService,
+    // },
   ],
 })
 export class UserModule {}

@@ -1,3 +1,4 @@
+import { ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
@@ -13,10 +14,15 @@ import { JwtAuthGuard } from './jwt-auth.guard';
     UserModule,
     PassportModule,
     // Jwt를 사용하기 위해 구현
-    JwtModule.register({
-      global: true,
-      secret: 'temp secret',
-      signOptions: { expiresIn: '1h' },
+    JwtModule.registerAsync({
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => {
+        return {
+          global: true,
+          secret: configService.get('jwt.secret'),
+          signOptions: { expiresIn: '1d' },
+        };
+      },
     }),
   ],
   providers: [
