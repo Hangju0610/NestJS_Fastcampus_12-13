@@ -9,6 +9,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Role } from '../enum/user.enum';
 
 @Entity()
 export class User {
@@ -17,6 +18,10 @@ export class User {
 
   @Column({ unique: true })
   email: string;
+
+  @Column({ type: 'enum', enum: Role })
+  // 초기 값은 User로 설정하기.
+  role: Role = Role.User;
 
   @Column()
   password: string;

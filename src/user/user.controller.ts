@@ -7,6 +7,8 @@ import { ApiGetItemsResponse, ApiGetResponse } from 'src/common/decorator/swagge
 import { FindUserResDto } from './dto/res.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { User, UserAfterAuth } from 'src/common/decorator/user.decorator';
+import { Roles } from 'src/common/decorator/role.decorator';
+import { Role } from './enum/user.enum';
 
 @ApiTags('User')
 @ApiExtraModels(FindUserReqDto, FindUserReqDto, FindUserResDto)
@@ -16,6 +18,7 @@ export class UserController {
 
   @ApiBearerAuth()
   @ApiGetItemsResponse(FindUserResDto)
+  @Roles(Role.Admin)
   @Get()
   @UseGuards(JwtAuthGuard)
   findAll(@Query() { page, size }: PageReqDto, @User() user: UserAfterAuth) {
