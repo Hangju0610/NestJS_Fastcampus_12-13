@@ -29,6 +29,7 @@ export class UserService {
 
   async checkUserIsAdmin(id: string) {
     const user = await this.userRepository.findOneBy({ id });
+    // 어드민인 경우 true, 아닌 경우 false 출력
     return user.role === Role.Admin;
   }
 }

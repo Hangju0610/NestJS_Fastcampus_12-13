@@ -31,17 +31,25 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     // 키 없이 디코딩이 가능하다.
     const decoded = this.jwtService.decode(token);
 
+    // url이 refresh가 아니거나, 토큰타입이 refresh가 아닌경우
+    // 에러 처리 진행
     if (url !== '/api/auth/refresh' && decoded['tokenType'] === 'refresh') {
       console.error('accessToken is required');
       throw new UnauthorizedException();
     }
 
+    // role 추가 진행
+    // 데코레이터를 이용하여 권한 확인 진행
+    // 데코레이터를 통해 ADMIN을 부여한 경우 ADMIN 출력
+    // 그렇지 않은 경우 undefined 출력한다.
     const requireRoles = this.reflector.getAllAndOverride<Role[]>(ROLES_KEY, [
       context.getHandler(),
       context.getClass(),
     ]);
+
     if (requireRoles) {
       const userId = decoded['sub'];
+      // user가 ADMIN인 경우 true, 아니면 false 출력
       return this.userService.checkUserIsAdmin(userId);
     }
     return super.canActivate(context);

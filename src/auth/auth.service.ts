@@ -39,26 +39,36 @@ export class AuthService {
     };
   }
 
+  // 리프레시 토큰 메서드
   async refresh(token: string, userId: string) {
+    // 리프레시 토큰이 DB에 저장되어 있는지 없는지 확인한다.
+    // 같은 토큰이 있는지 확인한다.
     const refreshTokenEntity = await this.refreshTokenRepository.findOneBy({ token });
+    // 저장되어 있지 않다면 에러 처리 진행
     if (!refreshTokenEntity) throw new BadRequestException();
+    // 토큰 재발급
     const accessToken = this.generateAccessToken(userId);
     const refreshToken = this.generateRefreshToken(userId);
     refreshTokenEntity.token = refreshToken;
+    // accessToken을 재발급 하는 경우 다시 저장 진행
+    // 왜냐하면 재발급 받고 return을 했는데 DB에 저장이 안되면, 에러가 발생한다.
+    await this.refreshTokenRepository.save(refreshTokenEntity);
     return { accessToken, refreshToken };
   }
 
+  // 엑세스 토큰 발급 메서드
   private generateAccessToken(userId: string) {
     const payload = { sub: userId, tokenType: 'access' };
     return this.jwtService.sign(payload, { expiresIn: '1d' });
   }
 
+  // 리프레시 토큰 발급 메서드
   private generateRefreshToken(userId: string) {
     const payload = { sub: userId, tokenType: 'refresh' };
     return this.jwtService.sign(payload, { expiresIn: '30d' });
   }
 
-  // Refresh토큰 확인 및 발급 진행
+  // 로그인 시 Refresh토큰 확인 및 발급 진행
   private async createRefreshTokenUsingUser(userId: string, refreshToken: string) {
     let refreshTokenEntity = await this.refreshTokenRepository.findOneBy({ user: { id: userId } });
     if (refreshTokenEntity) {

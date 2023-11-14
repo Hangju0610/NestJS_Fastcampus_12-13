@@ -34,6 +34,7 @@ export class AuthController {
 
   // refreshToken 확인용
   @ApiPostResponse(RefreshResDto)
+  // Swagger에서 로그인 시 BearerAuth를 통해 로그인 진행
   @ApiBearerAuth()
   @Post('refresh')
   async refresh(@Headers('authorization') authorization, @User() user: UserAfterAuth) {
