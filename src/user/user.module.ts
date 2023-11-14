@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entity/user.entity';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
+import { JwtService } from '@nestjs/jwt';
 
 // Mock 함수 제작
 const UserMockService = {
@@ -23,6 +24,7 @@ const UserMockService = {
     //   // 실제 제공하는 useValue 값은 UserMockService
     //   useValue: UserMockService,
     // },
+    JwtService,
   ],
 })
 export class UserModule {}
