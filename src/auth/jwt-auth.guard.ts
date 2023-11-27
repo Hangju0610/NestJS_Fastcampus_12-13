@@ -42,6 +42,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     // 데코레이터를 이용하여 권한 확인 진행
     // 데코레이터를 통해 ADMIN을 부여한 경우 ADMIN 출력
     // 그렇지 않은 경우 undefined 출력한다.
+    // metadata에 ROLES_KEY를 Override를 진행해준다.
     const requireRoles = this.reflector.getAllAndOverride<Role[]>(ROLES_KEY, [
       context.getHandler(),
       context.getClass(),
