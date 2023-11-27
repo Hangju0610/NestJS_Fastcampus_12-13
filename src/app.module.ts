@@ -9,9 +9,11 @@ import postgresConfig from './config/postgres.config';
 import jwtConfig from './config/jwt.config';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
 import swaggerConfig from './config/swagger.config';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
+    ThrottlerModule.forRoot([{ ttl: 60, limit: 10 }]),
     ConfigModule.forRoot({
       // 컨피그 전역 설정
       isGlobal: true,
