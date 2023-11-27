@@ -3,11 +3,13 @@ import { Injectable, BadRequestException, UnauthorizedException } from '@nestjs/
 import { UserService } from 'src/user/user.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RefreshToken } from './entity/refresh-token.entity';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
+import { User } from 'src/user/entity/user.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
+    private dataSource: DataSource,
     private userService: UserService,
     private jwtService: JwtService,
     @InjectRepository(RefreshToken) private refreshTokenRepository: Repository<RefreshToken>,
@@ -18,10 +20,32 @@ export class AuthService {
   }
 
   async signup(email: string, password: string) {
-    const user = await this.userService.findOneByEmail(email);
-    if (user) throw new BadRequestException('유저가 이미 존재합니다!');
-    const newUser = await this.userService.create(email, password);
-    return newUser;
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const user = await this.userService.findOneByEmail(email);
+      if (user) throw new BadRequestException('유저가 이미 존재합니다!');
+
+      const userEntity = queryRunner.manager.create(User, { email, password });
+      await queryRunner.manager.save(userEntity);
+      const accessToken = this.generateAccessToken(userEntity.id);
+      const refreshToken = this.generateRefreshToken(userEntity.id);
+
+      const refreshTokenEntity = queryRunner.manager.create(RefreshToken, {
+        user: { id: userEntity.id },
+        token: refreshToken,
+      });
+      await queryRunner.manager.save(refreshTokenEntity);
+      await queryRunner.commitTransaction();
+      return { id: userEntity.id, accessToken, refreshToken };
+    } catch (e) {
+      await queryRunner.rollbackTransaction();
+      throw e;
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   async signin(email: string, password: string) {

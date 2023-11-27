@@ -21,7 +21,10 @@ export class UserController {
   @Roles(Role.Admin)
   @Get()
   @UseGuards(JwtAuthGuard)
+  // 비동기 처리를 위해 Promise로 데이터를 받는다.
   async findAll(@Query() { page, size }: PageReqDto): Promise<FindUserResDto[]> {
+    // 전체 유저수 확인 메서드
+    // pagenation을 위해 Page Dto로 데이터를 받는다.
     const users = await this.userService.findAll(page, size);
     return users.map(({ id, email, createdAt }) => {
       return { id, email, createdAt: createdAt.toISOString() };

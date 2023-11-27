@@ -17,11 +17,11 @@ export class AuthController {
   @ApiPostResponse(SignupResDto)
   @Public()
   @Post('signup')
-  async signup(@Body() { email, password, passwordConfirm }: SignupReqDto) {
+  async signup(@Body() { email, password, passwordConfirm }: SignupReqDto): Promise<SignupResDto> {
     console.log(IS_PUBLIC_KEY);
     if (password !== passwordConfirm) throw new BadRequestException('비밀번호가 맞지 않습니다.');
-    const { id } = await this.authService.signup(email, password);
-    return { id };
+    const { id, accessToken, refreshToken } = await this.authService.signup(email, password);
+    return { id, accessToken, refreshToken };
   }
 
   @ApiPostResponse(SigninResDto)
