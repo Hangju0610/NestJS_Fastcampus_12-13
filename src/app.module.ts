@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { Logger, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { AnalyticsModule } from './analytics/analytics.module';
 import { UserModule } from './user/user.module';
@@ -43,6 +43,9 @@ import { LoggerMiddleware } from './common/middleware/logger.middleware';
     VideoModule,
     AnalyticsModule,
   ],
+  // 네스트에서 제공해주는 기본적인 로그 프로바이더로 사용하겠다고 하면
+  // 네스트 앱에서 만들었던 윈스턴 로거가 바로 지정해준다.
+  providers: [Logger],
 })
 export class AppModule implements NestModule {
   // configure 를 호출해야 한다.

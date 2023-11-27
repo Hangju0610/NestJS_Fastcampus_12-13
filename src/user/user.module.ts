@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entity/user.entity';
 import { UserController } from './user.controller';
@@ -25,6 +25,7 @@ const UserMockService = {
     //   useValue: UserMockService,
     // },
     JwtService,
+    Logger,
   ],
 })
 export class UserModule {}

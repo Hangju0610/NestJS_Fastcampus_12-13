@@ -1,11 +1,12 @@
-import { Injectable, Logger, NestMiddleware } from '@nestjs/common';
+import { Inject, Injectable, Logger, LoggerService, NestMiddleware } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
+  // app Module의 Logger를 주입받아 사용할 수 있게 되었다.
+  constructor(@Inject(Logger) private readonly logger: LoggerService) {}
   // 네스트에서 제공하는 로거 기능을 이용한다.
   // HTTP 컨텍스트 기반으로 동작하도록 구현
-  private logger = new Logger('HTTP');
 
   // use를 사용하여 미들웨어 구성
   use(req: Request, res: Response, next: NextFunction): void {

@@ -1,6 +1,6 @@
 import { ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { PassportModule } from '@nestjs/passport';
 import { UserModule } from 'src/user/user.module';
@@ -29,6 +29,7 @@ import { RefreshToken } from './entity/refresh-token.entity';
     TypeOrmModule.forFeature([RefreshToken]),
   ],
   providers: [
+    Logger,
     AuthService,
     JwtStrategy,
     //전역적으로 Jwt Guard 설치하기
