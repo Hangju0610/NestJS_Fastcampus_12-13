@@ -29,4 +29,12 @@ export class UserService {
     // 어드민인 경우 true, 아닌 경우 false 출력
     return user.role === Role.Admin;
   }
+
+  async createBulk(): Promise<void> {
+    for (let i = 4; i <= 10000; i++) {
+      await this.userRepository.save(
+        this.userRepository.create({ email: `nestjs${i}@fastcampus.com`, password: 'Password1!' }),
+      );
+    }
+  }
 }
