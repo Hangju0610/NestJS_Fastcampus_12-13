@@ -21,9 +21,11 @@ export class UserController {
   @Roles(Role.Admin)
   @Get()
   @UseGuards(JwtAuthGuard)
-  findAll(@Query() { page, size }: PageReqDto, @User() user: UserAfterAuth) {
-    console.log(user);
-    return this.userService.findAll();
+  async findAll(@Query() { page, size }: PageReqDto): Promise<FindUserResDto[]> {
+    const users = await this.userService.findAll(page, size);
+    return users.map(({ id, email, createdAt }) => {
+      return { id, email, createdAt: createdAt.toISOString() };
+    });
   }
 
   @ApiBearerAuth()
