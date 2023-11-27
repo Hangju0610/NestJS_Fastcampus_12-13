@@ -1,4 +1,4 @@
-import { ConfigService } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { Logger, Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
@@ -13,6 +13,7 @@ import { RefreshToken } from './entity/refresh-token.entity';
 
 @Module({
   imports: [
+    ConfigModule,
     UserModule,
     PassportModule,
     // Jwt를 사용하기 위해 구현
