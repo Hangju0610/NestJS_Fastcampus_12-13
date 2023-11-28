@@ -11,7 +11,9 @@ import { LoggerMiddleware } from './common/middleware/logger.middleware';
 import swaggerConfig from './config/swagger.config';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { HealthModule } from './health/health.module';
+import { EmailModule } from './email/email.module';
 import sentryConfig from './config/sentry.config';
+import emailConfig from './config/email.config';
 
 @Module({
   imports: [
@@ -20,7 +22,7 @@ import sentryConfig from './config/sentry.config';
       // 컨피그 전역 설정
       isGlobal: true,
       // 컨피그 파일 설정
-      load: [postgresConfig, jwtConfig, swaggerConfig, sentryConfig],
+      load: [postgresConfig, jwtConfig, swaggerConfig, sentryConfig, emailConfig],
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
@@ -48,6 +50,7 @@ import sentryConfig from './config/sentry.config';
     VideoModule,
     AnalyticsModule,
     HealthModule,
+    EmailModule,
   ],
   // 네스트에서 제공해주는 기본적인 로그 프로바이더로 사용하겠다고 하면
   // 네스트 앱에서 만들었던 윈스턴 로거가 바로 지정해준다.

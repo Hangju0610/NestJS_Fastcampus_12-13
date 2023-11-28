@@ -21,5 +21,6 @@ import { FindVideosQueryHandler } from './find-videos.handler';
     VideoCreatedHandler,
     FindVideosQueryHandler,
   ],
+  exports: [VideoService],
 })
 export class VideoModule {}

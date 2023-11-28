@@ -34,4 +34,14 @@ export class VideoService {
     const stream = createReadStream(videoPath);
     return { stream, mimetype, size };
   }
+  async findTop5Download() {
+    const videos = await this.videoRepository.find({
+      relations: ['user'],
+      order: {
+        downloadCnt: 'DESC',
+      },
+      take: 5,
+    });
+    return videos;
+  }
 }
