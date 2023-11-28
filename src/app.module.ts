@@ -10,6 +10,7 @@ import jwtConfig from './config/jwt.config';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
 import swaggerConfig from './config/swagger.config';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { HealthModule } from './health/health.module';
 import sentryConfig from './config/sentry.config';
 
 @Module({
@@ -46,6 +47,7 @@ import sentryConfig from './config/sentry.config';
     UserModule,
     VideoModule,
     AnalyticsModule,
+    HealthModule,
   ],
   // 네스트에서 제공해주는 기본적인 로그 프로바이더로 사용하겠다고 하면
   // 네스트 앱에서 만들었던 윈스턴 로거가 바로 지정해준다.
