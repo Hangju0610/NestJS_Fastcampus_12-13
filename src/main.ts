@@ -67,6 +67,7 @@ async function bootstrap() {
       transform: true,
     }),
   );
+  // Sentry 초기 설정 진행
   Sentry.init({ dsn: configService.get('SENTRY_DNS') });
   app.useGlobalInterceptors(new SentryInterceptor(), new TransformInterceptor());
 
